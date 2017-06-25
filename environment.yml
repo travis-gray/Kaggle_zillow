@@ -1,0 +1,6 @@
+name: zillow
+dependencies:
+- python=3.5
+- pip
+- anaconda
+- jupyter

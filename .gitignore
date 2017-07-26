@@ -1,4 +1,6 @@
+zillow.egg-info
 .DS_store
 *.pyc
-.ipynb_checkpoints/
-data/*
+.ipynb_checkpoints
+*.csv
+*.xlsx

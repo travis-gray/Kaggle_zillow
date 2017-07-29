@@ -19,6 +19,8 @@ from MyPipeline.YNto10mapper import YNto10mapper
 from MyPipeline.DFtoNPArray import DFtoNPArray
 
 def main():
+    cwd = os.getcwd()
+    
     drivers = CreateDatasets(properties_file='properties_2016.csv',
                              train_file='train_2016_v2.csv')
     drivers.run()

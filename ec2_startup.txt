@@ -5,3 +5,19 @@ wget https://repo.continuum.io/archive/Anaconda3-4.4.0-Linux-x86_64.sh
 bash Anaconda3-4.4.0-Linux-x86_64.sh
 source .bashrc
 pip install autoenv
+sudo yum install python-lxml
+
+git clone https://github.com/travis-gray/Kaggle_zillow.git
+cd Kaggle_zillow/zillow/Imports/
+mkdir data
+cd data
+pip install kaggle-cli
+
+kg download -u 'gray.travis.m@gmail.com' -p 'password' -c 'zillow-prize-1' -f 'properties_2016.csv.zip'
+kg download -u 'gray.travis.m@gmail.com' -p 'password' -c 'zillow-prize-1' -f 'train_2016_v2.csv.zip'
+unzip properties_2016.csv.zip
+unzip train_2016_v2.csv.zip
+
+cd /home/ec2-user/Kaggle_zillow/
+pip install -e .
+cd zillow

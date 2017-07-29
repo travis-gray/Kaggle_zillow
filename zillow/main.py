@@ -22,6 +22,7 @@ def main():
     drivers = CreateDatasets(properties_file='properties_2016.csv',
                              train_file='train_2016_v2.csv')
     drivers.run()
+    print('Drivers created')
 
     X_train, X_test, y_train, y_test = train_test_split(drivers.Xs['x_train'], drivers.y_train, random_state=8675309)
     params = {'n_estimators': 800,
@@ -97,16 +98,20 @@ def main():
     # plt.savefig(join(cwd, '/figures/feature_importance.png'))
 
     submission_y = pipeline.predict(drivers.Xs['x_scoring'])
+    print('Submission_y shape is:', submission_y.shape)
 
     submission_nonpivoted = pd.DataFrame({
         "ParcelId": drivers.scoring_driver["parcelid"],
         "transactiondate": drivers.scoring_driver["transactiondate"],
         "Pred": submission_y
     })
+    print('Non-pivoted submission DF shape:', submission_nonpivoted.shape)
+    print('First 30 rows of DF:', submission_nonpivoted.head(30))
 
     submission = submission_nonpivoted.pivot(index='ParcelId', columns='transactiondate', values='Pred').reset_index()
     submission.columns = ['ParcelID', '201610', '201611', '201612', '201710', '201711', '201712']
     submission.to_csv(join(cwd, 'submission.csv'), index=False)
+    print('Submission created!!! Time to move up the leaderboard!!!')
 
 if __name__ == "__main__":
     main()

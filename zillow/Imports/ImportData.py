@@ -95,6 +95,3 @@ class ReadInData(object):
 
         self.properties = pd.read_csv(join(module_path, 'data', self.properties_file),
                                       dtype=self.dtype_dict)
-
-        # Null values of latitude indicate properties that don't need to be in the dataset
-        self.properties = self.properties[self.properties.latitude.notnull()]

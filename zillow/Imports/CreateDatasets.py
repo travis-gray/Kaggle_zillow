@@ -53,12 +53,17 @@ class CreateDatasets(ReadInData):
         self.import_data()
 
         train = pd.merge(self.properties, self.train_driver, how='left', on='parcelid')
+        # Null values of latitude indicate properties that don't need to be in the training dataset
+        # They still need to be included in the scoring dataset
+        train = train[train.latitude.notnull()]
         self.y_train = train[self.y_col]
         self.Xs['x_train'] = train.drop(self.drop_indices+[self.y_col], axis=1)
 
         self.scoring_driver = self.create_scoring_driver(self.properties)
         self.scoring = pd.merge(self.scoring_driver, self.properties, how='left', on='parcelid')
         self.Xs['x_scoring'] = self.scoring.drop(self.drop_indices, axis=1)
+
+
 
         # Calculate categorical means
         for column in self.mean_cols:

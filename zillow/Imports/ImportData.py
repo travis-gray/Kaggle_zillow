@@ -73,11 +73,9 @@ class ReadInData(object):
         # Categorical columns with many unique values
         self.mean_cols = ['propertyzoningdesc',
              'propertycountylandusecode',
-             'rawcensustractandblock',
              'regionidcity',
              'regionidneighborhood',
              'regionidzip',
-             'censustractandblock',
              'assessmentyear'
             ]
 

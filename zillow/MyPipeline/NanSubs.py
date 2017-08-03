@@ -30,8 +30,8 @@ class NanSubs(BaseEstimator, TransformerMixin):
             'heatingorsystemtypeid': 0, #getdummies
             'latitude': 0,
             'longitude': 0,
-            # 'lat_bins': 0,
-            # 'lon_bins': 0,
+            'latitude_bins': 0,
+            'longitude_bins': 0,
             'lotsizesquarefeet': 0, #Lots of heteroscedasticity here, high values have low logerrors
             'poolcnt': 0,
             'poolsizesum': 0, #Could use 520 (mean) here for rows where poolcnt = 1

@@ -1,11 +1,11 @@
 #!
-sudo yum update
-sudo yum install git
+sudo yum -y update
+sudo yum -y install git
 wget https://repo.continuum.io/archive/Anaconda3-4.4.0-Linux-x86_64.sh
 bash Anaconda3-4.4.0-Linux-x86_64.sh
 source .bashrc
 pip install autoenv
-sudo yum install python-lxml
+sudo yum -y install python-lxml
 
 git clone https://github.com/travis-gray/Kaggle_zillow.git
 cd Kaggle_zillow/zillow/Imports/

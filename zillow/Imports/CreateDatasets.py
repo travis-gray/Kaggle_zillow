@@ -20,7 +20,7 @@ class CreateDatasets(ReadInData):
         self.Xs = {'x_train': pd.DataFrame(), 'x_scoring': pd.DataFrame()}
 
         # Special columns to treat differently
-        self.drop_indices = ['parcelid']
+        self.drop_indices = ['parcelid', 'rawcensustractandblock', 'censustractandblock',]
         self.y_col = 'logerror'
 
         self.mean_col_dfs_ = {}

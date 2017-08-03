@@ -11,22 +11,23 @@ from sklearn import metrics
 from os.path import join
 import os
 
-from Imports.CreateDatasets import CreateDatasets
+from zillow.Imports.CreateDatasets import CreateDatasets
 
-from MyPipeline.NanSubs import NanSubs
-# from MyPipeline.Binner import Binner
-from MyPipeline.YNto10mapper import YNto10mapper
-from MyPipeline.DFtoNPArray import DFtoNPArray
+from zillow.MyPipeline.NanSubs import NanSubs
+from zillow.MyPipeline.Binner import Binner
+from zillow.MyPipeline.YNto10mapper import YNto10mapper
+from zillow.MyPipeline.AddMultInteractions import AddMultInteractions
+from zillow.MyPipeline.AddRatioInteractions import AddRatioInteractions
+from zillow.MyPipeline.DFtoNPArray import DFtoNPArray
 
 def main():
     cwd = os.getcwd()
-    
+
     drivers = CreateDatasets(properties_file='properties_2016.csv',
                              train_file='train_2016_v2.csv')
     drivers.run()
     print('Drivers created')
 
-    X_train, X_test, y_train, y_test = train_test_split(drivers.Xs['x_train'], drivers.y_train, random_state=8675309)
     params = {'n_estimators': 800,
               'learning_rate': 0.01,
               'max_depth': 6,
@@ -39,8 +40,12 @@ def main():
     print('Starting pipeline')
     pipeline = Pipeline(
         [
+            ('binning_lat', Binner('latitude', 100)),
+            ('binning_lon', Binner('longitude', 100)),
             ('basefeatures', NanSubs()),
             ('trxndqflag', YNto10mapper(['taxdelinquencyflag'])),
+            ('multiplicative_intxns', AddMultInteractions(intxn_cols)),
+            ('ratio_intxns', AddRatioInteractions(intxn_cols)),
             ('numpyarray', DFtoNPArray()),
             ("gbm", gbm)
         ]
@@ -48,6 +53,10 @@ def main():
 
     # cross_val_score(pipeline, drivers.Xs['x_train'], drivers.y_train, cv=5, scoring='mean_absolute_error')
     # pipeline.fit(drivers.Xs['x_train'], drivers.y_train)
+    # print('Scores were:', scores)
+    # print('Average score of:', np.average(scores))
+
+    X_train, X_test, y_train, y_test = train_test_split(drivers.Xs['x_train'], drivers.y_train, random_state=8675309)
     pipeline.fit(X_train, y_train)
     print('Finished pipeline')
     pred = pipeline.predict(X_test)
@@ -97,7 +106,7 @@ def main():
     # plt.yticks(pos, X_train.columns[sorted_idx])
     # plt.xlabel('Relative Importance')
     # plt.title('Variable Importance')
-    # plt.savefig(join(cwd, '/figures/feature_importance.png'))
+    # plt.savefig(join(cwd, 'figures/feature_importance.png'))
 
     submission_y = pipeline.predict(drivers.Xs['x_scoring'])
     print('Submission_y shape is:', submission_y.shape)
